@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>  
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    margin-top: 5vw;
+    height: 300px; /* Should be removed. Only for demonstration */
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.resultados{
+    padding: 3vh;
+    color: white;
+    background: rgb(255, 255, 255,.2);
+    box-shadow: 0 5px 15px rgb(255, 255, 255,.5);
+    height: 276%;
+    border-radius: 3vh;
+}
+
+
+
+.imgg{
+    left: 100%;
+    margin-left: 9vw;
+}
+
+table, th, td{
+    padding: 1vh;
+    background-color: transparent;
+    opacity: .9;
+    table-layout: fixed; 
+    border-collapse: collapse;
+    text-align: start;
+    width: 100%;
+    border-radius: 5vh;
+    margin-bottom: 2vh;
+}
+
+h1{
+    text-align: center;
+
+}
+
+footer{
+    align-items: flex-end;
+    color: white;
+}
+
+
+div nav {
+	background:transparent;
+    margin-bottom:10px;
+    box-shadow: 0 5px 15px rgb(255, 255, 255,.5);
+}
+
+.header{
+    background: transparent;
+    color: white;
+    height: 5rem;
+    left: 0;
+    top: 0;
+    width: 100%;
+      overflow:hidden; /* Eliminamos errores de float */
+      background:transparent;
+      box-shadow: 0 5px 15px rgb(255, 255, 255,.5);
+  }
+
+  .header{
+    background: transparent;
+    color: white;
+    height: 5rem;
+    left: 0;
+    top: 0;
+    width: 100%;
+      overflow:hidden; /* Eliminamos errores de float */
+      background:transparent;
+  	position:fixed;
+    z-index:1000;
+    box-shadow: 0 5px 15px rgb(255, 255, 255,.5);
+	top:0;
+	width:100%;
+  }
+
+  /* Elementos del header */
+  .header a{
+    color: white;
+    text-decoration: none;
+  }
+
+  /* Wrapper */
+  .wrapper {
+    width:100%; /* Establecemos que el ancho sera del 90% */
+    max-width:1600px; /* Aqui le decimos que el ancho máximo sera de 1000px */
+    margin:auto; /* Centramos los elementos */
+  overflow:hidden; /* Eliminamos errores de float */
+  align-content: center;
+  margin-top: 1vw;
+
+}
+
+/* Texto Departamento de Tutorias */
+header .logo {
+    color:#f2f2f2;
+    font-size:50px;
+  float:left;
+  
+}
+
+@media only screen and (max-width: 1840px) {
+   
+
+
+.column {
+    float: left;
+    margin-bottom: 80vh;
+    width: 200%;
+    height: 50%;
+    padding: 20px;
+    margin-top: 10vw;
+    height: 300px; /* Should be removed. Only for demonstration */
+}
+
+.imgg{
+max-width: 20px;
+max-height: 20px;
+left: 100%;
+    margin-left: 1vw;
+}
+
+  }
+
+</style>
+
+</head>
+<body background="/static/fondo.jpg">
+
+    <header class="header">
+        <div class="MENU">
+            <div class="wrapper">
+                <div class="logo">Alianza Quetzal</div>
+              
+            </div>
+             </div>
+        </header>
+
+        <div class="row">
+            <div class="column">
+                <div class="resultados">
+                    <h1>Resultados del escaneo</h1>
+                    <table>
+                        <tr>
+                          <th><h3>Riesgo de infeccion: </h3></th>
+                          <th><h2>{{ variable }} %</h2></th>
+                        </tr>
+                        <tr>
+                          <td><h3>Objeto descontaminado al: </h3> </td>
+                          <td><h2>{{ variable2 }} %</h2></td>
+                        </tr>
+                        <tr>
+                          <td><h3>Areas descontaminadas</h3></td>
+                          <td><h2>{{ variable4 }} %</h2></td>
+                        </tr>
+                        <tr>
+                          <td><h3>Areas contaminadas</h3></td>
+                          <td><h2>{{ variable5 }} %</h2></td>
+                        </tr>
+                        <tr>
+                          <td><h3>Estatus: </h3></td>
+                          <td><h2>{{ variable6 }}</h2></td>
+                        </tr>
+                      </table>
+                      <table>
+                          <tr>
+                              <th>Recomendación</th>
+                              <td><h2>{{recc}}</h2></td>
+                          </tr>
+                      </table>
+           
+                </div>
+            </div>
+        <div class="column" >
+            <div class="resultados">
+                <h1>Alimento escaneado</h1>
+                <div class="imgg">
+                    <img src="/static/conteo.png">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
