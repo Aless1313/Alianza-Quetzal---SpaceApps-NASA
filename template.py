@@ -11,7 +11,6 @@ app = Flask(__name__)
 cache.init_app(app)
 app.static_folder = 'static'
 
-
 def dibujarContorno(contornos, color):
   for (i, c) in enumerate(contornos):
     M = cv2.moments(c)
@@ -93,7 +92,6 @@ promedioDescontaminadoHTML = promedioDescontaminado
 cantidadVioleta = len(contornosVioleta)
 cantidadVerde =len(contornosVerde)
 
-
 cantidadTotal = cantidadVioleta + cantidadVerde
 
 @app.route('/')
@@ -103,7 +101,5 @@ def index():
 if __name__ == '__main__':
     app.run(debug= True, port=8000)
     
-
-
 cv2.waitKey(0)
 cv2.destroyAllWindows()
