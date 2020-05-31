@@ -1,9 +1,14 @@
 import cv2
 import numpy as np
 import time
+import os
 from flask import Flask
 from flask import render_template
+from flask_caching import Cache
+
+cache = Cache(config={'CACHE_TYPE': 'null'})
 app = Flask(__name__)
+cache.init_app(app)
 app.static_folder = 'static'
 
 
@@ -69,14 +74,15 @@ cv2.circle(imgResumen, (30,70), 15, (140,40,120), -1)
 cv2.circle(imgResumen, (30,110), 15, (0,255,0), -1)
 
 if len(contornosVioleta)>235 or len(contornosVerde)>1:
-   variable6= "Bacterias detectadas" 
-   variable67="Se recomienda desinfectar de nuevo"
+   variable6= "bacteria detected" 
+   variable67="It is recommended to disinfect again"
   
 else:
     variable6= "No Danger"
-    variable67="El producto esta fuera de peligro"
+    variable67="The product is in good condition"
     
 totalCnts = len(contornosVioleta) + len(contornosVerde)
+pr=totalCnts*100/totalCnts
 
 promedioVirus = (len(contornosVerde) * 100)/totalCnts
 promedioVirusHTML = promedioVirus
@@ -85,15 +91,18 @@ promedioDescontaminado = (len(contornosVioleta)*100)/totalCnts
 promedioDescontaminadoHTML = promedioDescontaminado
 
 cantidadVioleta = len(contornosVioleta)
-cantidadVerde = len(contornosVerde)
+cantidadVerde =len(contornosVerde)
+
+
 cantidadTotal = cantidadVioleta + cantidadVerde
 
 @app.route('/')
 def index():
-    return render_template('index.htm',  variable= promedioVirusHTML, variable2=promedioDescontaminadoHTML, variable3=cantidadVioleta, variable4=cantidadVerde, variable5=cantidadTotal, variable6=variable6, recc=variable67)
+    return render_template('index.htm',  variable= promedioVirusHTML, variable2=promedioDescontaminadoHTML, variable3=cantidadVioleta, variable4=cantidadVerde, variable5=cantidadVioleta, variable6=variable6, recc=variable67)
 
 if __name__ == '__main__':
     app.run(debug= True, port=8000)
+    
 
 
 cv2.waitKey(0)
