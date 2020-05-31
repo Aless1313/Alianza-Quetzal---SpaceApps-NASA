@@ -1,0 +1,360 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Robot Control</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
+            }
+            
+            
+            .container_principal{
+                width: 50%;
+                height: 100%;
+                float: left;
+                border-right: 1px solid #b1b1b1;
+            }
+            
+            .display{
+                height: 50%;
+                width: 100%;
+                background-image: url(img/display.jpg);
+                background-position: center;
+                background-size: cover;
+                
+            }
+            
+            .controles_left{
+                height: 30%;
+                width: 30%;
+                float: left;
+            
+            }
+            
+            .controles_right{
+                height: 30%;
+                width: 30%;
+                float: right;
+            
+            }
+            
+             
+            .menu_1{
+                margin-left: 5%;
+                margin-right: 10px;
+                margin-top: 10px;
+            }
+            
+            .secundario{
+            }
+            
+            .secundario_mitad_top{
+                height: 50%;
+                width: 100%;
+            }
+            
+            .secundario_mitad_bottom{
+                height: 50%;
+                width: 100%;
+            }
+            
+            
+            h2{
+                font-size: 18px;
+                margin-top: 10px;
+            }
+            
+            h3{
+                font-size: 12px;
+                margin-left: 40px;
+                margin-top: 10px;
+            }
+            
+            .contenedor_secundario_mitad_top{
+                margin-left: 5%;
+            }
+            
+            .g_mapa{
+                height: 200px;
+                width: 300px;
+                float: right;
+                margin-right:20px;
+                margin-top: 20px;
+            }
+            .card {
+              box-shadow: 0 4px 8px 0 rgba(47, 47, 47, 0.2);
+              width: 30%;
+              background:#d8d5d5; 
+              margin-left: 25%;
+              margin-top: 3%;
+            }
+
+            .container {
+              padding: 2px 16px;
+            }
+            
+            h5{
+               color:#bfb9b9; 
+            }
+            
+            .referencias_opciones{
+                height: 16%;
+                width: 100%;
+                background: #d3cece;
+                float: left;
+                margin-top:-7%;
+            }
+            
+            .sub_opc{
+                width: 10%;
+                height: 100%;
+                float: left;
+                margin-left: 5%;
+                position: relative;
+            }
+            
+            h6{
+                text-align: center;
+                font-size: 14px;
+            }
+        </style>
+        <!--#e73c71 -->
+    </head>
+    <body>
+       <div class="container_principal">
+            <div class="display">
+                <h5 style="position: absolute;"> 
+                    <img src="{{url_for('static', filename='images/live.png')}}" width="30">
+                    LIVE CAMERA</h5>
+                <img src="{{url_for('static', filename='images/objetoNuevo.jpg')}}" width="100%" style="height: 100%;">
+                
+            </div>
+            <div class="alert alert-primary" role="alert">
+              Robot <h1 id="contador" style="font-size: 14px;"></h1>
+            </div>
+            <div class="controles_left">
+                <div class="btn-group">
+                  <button class="btn menu_1"><img src="{{url_for('static', filename='images/falsoIcon.png')}}" alt=""></button>
+                  <button class="btn btn-light menu_1" onclick="robot_avanzando()"><img src="{{url_for('static', filename='images/arriba.png')}}" alt=""></button>
+                  <button class="btn menu_1"><img src="img/falsoIcon.png" alt=""></button>
+                </div>
+                <div class="btn-group">
+                  <button class="btn btn-light menu_1" onclick="robot_izquierda()"><img src="{{url_for('static', filename='images/izquierda.png')}}" alt=""></button>
+                  <button class="btn btn-light menu_1"><img src="{{url_for('static', filename='images/stop.png')}}" alt=""></button>
+                  <button class="btn btn-light menu_1" onclick="robot_derecha()"><img src="{{url_for('static', filename='images/derecha.png')}}" alt=""></button>
+                </div>
+                <div class="btn-group">
+                  <button class="btn menu_1"><img src="{{url_for('static', filename='images/falsoIcon.png')}}" alt=""></button>
+                  <button class="btn btn-light menu_1" onclick="robot_abajo()"><img src="{{url_for('static', filename='images/abajo.png')}}" alt=""></button>
+                  <button class="btn menu_1"><img src="{{url_for('static', filename='images/falsoIcon.png')}}" alt=""></button>
+                </div>
+            </div>
+            <div class="controles_right">
+                <div class="btn-group">
+                  <button class="btn btn-danger menu_1" onclick="activar_UV_10segundos()">1</button>
+                  <button class="btn btn-danger menu_1" onclick="tomar_foto()">2</button>
+                  <button class="btn btn-danger menu_1" onclick="elevar_brazo()">3</button>
+                </div>
+                <div class="btn-group">
+                  <button class="btn btn-danger menu_1" onclick="bajar_brazo()">4</button>
+                  <button class="btn btn-danger menu_1" onclick="agarrar()">5</button>
+                  <button class="btn btn-danger menu_1" onclick="soltar()">6</button>
+                </div>
+                
+            </div>
+            <div class="referencias_opciones">
+                <h1 style="font-size: 15px;">References | Robot Actions</h1>
+                <div class="sub_opc">
+                    <button class="btn btn-light" style="margin-top: 10%; margin-left: 20%;">1</button>
+                    <h6>UV Light</h6>
+                </div>
+                <div class="sub_opc">
+                    <button class="btn btn-light" style="margin-top: 10%; margin-left: 20%;">2</button>
+                    <h6>Take Photo</h6>
+                </div>
+                <div class="sub_opc">
+                    <button class="btn btn-light" style="margin-top: 10%; margin-left: 20%;">3</button>
+                    <h6>Up Arm</h6>
+                </div>
+                <div class="sub_opc">
+                    <button class="btn btn-light" style="margin-top: 10%; margin-left: 20%;">4</button>
+                    <h6>Down Arm</h6>
+                </div>
+                <div class="sub_opc">
+                    <button class="btn btn-light" style="margin-top: 10%; margin-left: 20%;">5</button>
+                    <h6>Take</h6>
+                </div>
+                <div class="sub_opc">
+                    <button class="btn btn-light" style="margin-top: 10%; margin-left: 20%;">6</button>
+                    <h6>Leave</h6>
+                </div>
+               
+                
+            </div>
+       </div>
+       <div class="container_principal secundario">
+           <div class="secundario_mitad_top">
+                <div class="g_mapa">
+                   <div class="alert alert-success" role="alert">
+                        {{variable8}}
+                    </div>
+                    <button class="btn btn-warning">Save Image</button>
+                    <button class="btn btn-danger">Delete Image</button>
+               </div>
+                  <div class="contenedor_secundario_mitad_top">
+                   <h2><img src="{{url_for('static', filename='images/robot.png')}}" alt="" width="30"> More Sensors (Robot)</h2>
+                   <img src="{{url_for('static', filename='images/mapa.png')}}" alt="" width="20"> Map (Current Location)
+                   <h3>Latitude: 145.31</h3>
+                   <h3>Length: 13.24</h3>
+                   <img src="{{url_for('static', filename='images/tmp.png')}}" alt="" width="20"> Temperature
+                   <h3>Current Temperature: 25ºC</h3>
+                   <img src="{{url_for('static', filename='images/humedad.png')}}" alt="" width="20"> Humidity
+                   <h3>Current Humidity: 55 %</h3>
+                   <img src="{{url_for('static', filename='images/notificacion.png')}}" alt="" width="20"> Object Detected
+                       
+               </div>
+              
+           </div>
+           <div class="secundario_mitad_bottom">
+              <div class="card">
+              <img src="{{url_for('static', filename='images/robot.png')}}" style="width:30%">
+              <div class="container">
+                <h4 style="font-size:20px;"><b>Robot ID: 0001</b></h4> 
+                <p>Unitys Availables: <span id="unidades">1</span></p>
+                <div class="alert alert-success" role="alert">
+                  State: Active <p id="unidades"></p>
+                </div>
+                <button class="btn btn-success" onclick="envioUnidad()">Send Unity</button>
+                <button class="btn btn-danger" style="margin-top: 2%;">Disable Unity</button>
+                 
+              </div>
+            </div>
+
+           </div>
+           
+       </div>
+       <script type="text/javascript">
+            
+           function robot_avanzando(){
+            var counter = 10;
+            setInterval(function(){
+                counter--;
+                if(counter >= 0){
+                    id = document.getElementById("contador");
+                    id.innerHTML = "Robot avanzando: " +counter + " segundos.";
+                }
+                
+                if(counter == 0){
+                    id.innerHTML = "";
+                }
+            }, 1000);
+    
+           }
+           
+           function robot_izquierda(){
+            var counter = 10;
+            setInterval(function(){
+                counter--;
+                if(counter >= 0){
+                    id = document.getElementById("contador");
+                    id.innerHTML = "Robot girando hacia la izquierda: " +counter + " segundos.";
+                }
+                
+                if(counter == 0){
+                    id.innerHTML = "";
+                }
+            }, 1000);
+    
+           }
+           
+           function robot_derecha(){
+            var counter = 10;
+            setInterval(function(){
+                counter--;
+                if(counter >= 0){
+                    id = document.getElementById("contador");
+                    id.innerHTML = "Robot girando hacia la derecha: " +counter + " segundos.";
+                }
+                
+                if(counter == 0){
+                    id.innerHTML = "";
+                }
+            }, 1000);
+    
+           }
+           
+           function robot_abajo(){
+            var counter = 10;
+            setInterval(function(){
+                counter--;
+                if(counter >= 0){
+                    id = document.getElementById("contador");
+                    id.innerHTML = "Robot retrocediendo: " +counter + " segundos.";
+                }
+                
+                if(counter == 0){
+                    id.innerHTML = "";
+                }
+            }, 1000);
+    
+           }
+           
+           function robot_freno(){
+            document.getElementById("contador").innerHTML = "Robot detenido."
+           }
+           
+           /*Actividades Robot*/
+           
+           function activar_UV_10segundos(){
+            var counter = 10;
+            setInterval(function(){
+                counter--;
+                if(counter >= 0){
+                    id = document.getElementById("contador");
+                    id.innerHTML = "Escanenando con luz UV: " +counter + " segundos.";
+                }
+                
+                if(counter == 0){
+                    id.innerHTML = "";
+                }
+            }, 1000);
+           }
+           
+           function tomar_foto(){
+            document.getElementById("contador").innerHTML = "Tomando foto."
+           }
+           
+           function elevar_brazo(){
+            document.getElementById("contador").innerHTML = "Elevando brazo."
+           }
+           
+           function bajar_brazo(){
+            document.getElementById("contador").innerHTML = "Bajando brazo."
+           }
+           
+           function agarrar(){
+            document.getElementById("contador").innerHTML = "Agarrando objeto."
+           }
+                      
+           function soltar(){
+            document.getElementById("contador").innerHTML = "Soltando objeto."
+           }
+           
+           function envioUnidad(){
+               var unidades = 1;
+               document.getElementById("unidades").innerHTML = unidades - 1;
+               cant = unidades;
+               if(cant == 0){
+                   id = document.getElementById("unidades")
+                   id.innerHTML = "No hay mas unidades disponibles";
+               }
+           }
+           
+           
+           
+           
+        </script>
+    </body>
+</html>

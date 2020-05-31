@@ -1,2 +1,231 @@
 
 
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+* {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+a{
+    color: transparent;
+    background-color: transparent;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    margin-top: 5vw;
+    height: 350px; /* Should be removed. Only for demonstration */
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.resultados{
+    padding: 3vh;
+    color: white;
+    background: rgb(255, 255, 255,.3);
+    box-shadow: 0 5px 15px rgb(255, 255, 255,.7);
+    height: 180%;
+    border-radius: 3vh;
+    align-items: center;
+}
+
+
+
+.imgg{
+margin-bottom: 2vw;
+    margin-left: 11vw;
+}
+
+table, th, td{
+
+    background-color: transparent;
+    opacity: .9;
+    table-layout: fixed; 
+    border-collapse: collapse;
+    text-align: start;
+    width: 100%;
+    border-radius: 5vh;
+ 
+}
+
+h1{
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+footer{
+    align-items: flex-end;
+    color: white;
+}
+
+
+div nav {
+	background:transparent;
+    margin-bottom:10px;
+    box-shadow: 0 5px 15px rgb(255, 255, 255,.5);
+}
+
+.header{
+    background: transparent;
+    color: white;
+    height: 5rem;
+    left: 0;
+    top: 0;
+    width: 100%;
+      overflow:hidden; /* Eliminamos errores de float */
+      background:transparent;
+      box-shadow: 0 5px 15px rgb(255, 255, 255,.5);
+  }
+
+  .header{
+    background: transparent;
+    color: white;
+    height: 5rem;
+    left: 0;
+    top: 0;
+    width: 100%;
+      overflow:hidden; /* Eliminamos errores de float */
+      background:transparent;
+  	position:fixed;
+    z-index:1000;
+    box-shadow: 0 5px 15px rgb(255, 255, 255,.5);
+	top:0;
+	width:100%;
+  }
+
+  /* Elementos del header */
+  .header a{
+    color: white;
+    text-decoration: none;
+  }
+
+  /* Wrapper */
+  .wrapper {
+    width:100%; /* Establecemos que el ancho sera del 90% */
+    max-width:1600px; /* Aqui le decimos que el ancho máximo sera de 1000px */
+    margin:auto; /* Centramos los elementos */
+  overflow:hidden; /* Eliminamos errores de float */
+  align-content: center;
+  margin-top: 1vw;
+
+}
+
+/* Texto Departamento de Tutorias */
+header .logo {
+    color:#f2f2f2;
+    font-size:50px;
+  float:left;
+  font-style: italic;
+  margin-left: 1vw;
+
+}
+
+
+h3{
+color: white;
+font-family: Arial, Helvetica, sans-serif;
+font-style: oblique;
+font-size: 15px;
+}
+
+h2{
+    font-size: 15px;
+}
+
+
+
+
+.btn{
+    align-items: flex-end;
+    left: 100px;
+    padding: 5vh;
+    margin-left: 9vw;
+
+}
+
+#piechart{
+    background-color: transparent;
+}
+
+a.neon
+{
+	position: relative;
+	padding: 40px;
+    margin: 0 15px;
+	color: #3cff00;
+	text-decoration: none;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-size: 10px;
+    transition: 0.5s;
+}
+
+a.neon:before /*will1*/
+{
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 10px;
+	height: 10px;
+	border-top: 2px solid #3cff00;
+	border-left: 2px solid #3cff00;
+	overflow: hidden;
+	transition: 0.5s; 
+	transition-delay: 0.5s; 
+}
+
+a.neon:nth-child(1)
+{
+	filter: hue-rotate(115deg);
+}
+
+a.neon:nth-child(3)
+{
+	filter: hue-rotate(270deg);
+}
+
+
+a.neon:hover
+{
+	background: #3cff00;
+	color: #111111;
+	box-shadow: 0 0 50px #3cff00;
+	transition-delay: 0.5s; 
+}
+
+a.neon:hover:before
+{
+	width: 100%;
+	height: 100%;
+	transition-delay: 0s; 
+}
+
+a.neon:after /*will2*/
+{
+	content: '';
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 10px;
+	height: 10px;
+	border-bottom: 2px solid #3cff00;
+	border-right: 2px solid #3cff00;
+	transition: 0.5s; 
+	transition-delay: 0.5s; 
+}
+
+
+a:.neonhover:after
+{
+	width: 100%;
+	height: 100%;
+	transition-delay: 0s; 
+}
