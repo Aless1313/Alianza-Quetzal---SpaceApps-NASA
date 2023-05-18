@@ -1,0 +1,365 @@
+v#include <Arduino.h>
+#include <NewPing.h>
+#include <Servo.h>
+#include <SPI.h>
+#include <Pixy2.h>
+#include <Wire.h>
+
+// Dirección I2C de la PixyCam
+#define PIXY_I2C_ADDRESS 0x54
+
+
+Pixy2 pixy;
+
+//No mover estos pines 
+#define trigger_frontal  17
+#define echo_frontal     16
+
+#define trigger_derecho  15
+#define echo_derecho     14
+
+#define trigger_izquierdo 4
+#define echo_izquierdo    5
+
+#define MAX_DISTANCE 200  //Distancia maxima del sensor ultrasonico
+
+//Sensor de color
+#define color_s1 32
+#define color_s2 33
+#define color_s3 34
+#define color_s4 35
+#define color_out 36
+
+int negro = 0;
+
+NewPing u_frontal(trigger_frontal, echo_frontal, MAX_DISTANCE);
+NewPing u_derecho(trigger_derecho, echo_derecho, MAX_DISTANCE);
+NewPing u_izquierdo(trigger_izquierdo, echo_izquierdo, MAX_DISTANCE);
+
+//No mover estos pines
+//Motor frontal derecho
+#define m1_1 26
+#define m1_2 27
+
+//Motor trasero derecho
+#define m2_1 28
+#define m2_2 29
+
+//Motor trasero izquierdo
+#define m3_1 25
+#define m3_2 24
+
+//Motor delantero izquierdo
+#define m4_1 22
+#define m4_2 23
+
+//Distancia entre robot y pared
+#define safe_distance 10 //Son 10cm entre robot y pared
+
+unsigned long previousMillis = 0;  // tiempo anterior
+const long interval = 3000;  // intervalo de tiempo en milisegundos
+
+Servo camera;
+Servo dispenser;
+
+//Funciones de movimientos
+void adelante();
+void derecha();
+void izquierda();
+void stop();
+void scan();
+
+unsigned long current_time;
+unsigned long past_time;
+
+void setup() {
+
+
+  //Declaramos todos los pines de los motores como salida
+  pinMode(m1_1, OUTPUT);
+  pinMode(m1_2, OUTPUT);
+
+  pinMode(m2_1, OUTPUT);
+  pinMode(m2_2, OUTPUT);
+
+  pinMode(m3_1, OUTPUT);
+  pinMode(m3_2, OUTPUT);
+
+  pinMode(m4_1, OUTPUT);
+  pinMode(m4_2, OUTPUT);
+
+  //Declarar pines sensor de color como salida
+  pinMode(color_s1, OUTPUT);
+  pinMode(color_s2, OUTPUT);
+  pinMode(color_s3, OUTPUT);
+  pinMode(color_s4, OUTPUT);
+  pinMode(color_out, INPUT);
+  digitalWrite(color_s1, HIGH);
+  digitalWrite(color_s2, HIGH);
+  
+  //Iniciamos pixycam
+  SPI.begin();
+  pixy.init();
+
+  //Declaramos pines de servos
+  camera.attach(18);
+  dispenser.attach(19);
+}
+
+void loop() {
+  current_time = millis();
+
+  int distancia_frontal = u_frontal.ping_cm();
+  int distancia_derecha = u_derecho.ping_cm();
+  int distancia_izquierda = u_izquierdo.ping_cm();
+
+
+
+  if(distancia_frontal>1 && distancia_frontal<safe_distance+12){
+    stop();
+    delay(13);
+ 
+
+    if(distancia_derecha < safe_distance && distancia_izquierda > safe_distance){
+      izquierda();
+      delay(13);
+      stop();
+      //delay(29);
+    }else if(distancia_derecha > safe_distance && distancia_izquierda < safe_distance){
+      derecha();
+      delay(13);
+      stop();
+      //delay(29);
+    }else if(distancia_derecha > safe_distance && distancia_izquierda > safe_distance){
+      izquierda();
+      delay(13);
+      stop();
+      //delay(29);
+    }else if(distancia_derecha < safe_distance && distancia_izquierda < safe_distance){
+      izquierda();
+      delay(13);
+      stop();
+      izquierda();
+      delay(13);
+      stop();
+      //delay(29);
+    } else if(distancia_derecha < safe_distance){
+      izquierda();
+      delay(13);
+      stop();
+      izquierda();
+      delay(13);
+      stop();
+      //delay(29);
+    }
+  
+  else if(distancia_izquierda < safe_distance){
+      izquierda();
+      delay(13);
+      stop();
+      izquierda();
+      delay(13);
+      stop();
+      delay(20);
+    }
+
+  }else{  
+    //Cambiar esto pq hace q se detenga el robot y en la rampa no subira
+    adelante();
+    delay(20);
+    //scan();  
+    stop();
+    delay(12);
+  } 
+  
+
+
+}
+
+void adelante(){
+  digitalWrite(m1_1, HIGH);
+  digitalWrite(m1_2, LOW);
+
+  digitalWrite(m2_1, HIGH);
+  digitalWrite(m2_2, LOW);
+
+  digitalWrite(m3_1, HIGH);
+  digitalWrite(m3_2, LOW);
+
+  digitalWrite(m4_1, HIGH);
+  digitalWrite(m4_2, LOW);
+}
+
+void izquierda(){
+  digitalWrite(m1_1, HIGH);
+  digitalWrite(m1_2, LOW);
+
+  digitalWrite(m2_1, HIGH);
+  digitalWrite(m2_2, LOW);
+
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, HIGH);
+
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, HIGH);
+}
+
+void derecha(){
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, HIGH);
+
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, HIGH);
+
+  digitalWrite(m3_1, HIGH);
+  digitalWrite(m3_2, LOW);
+
+  digitalWrite(m4_1, HIGH);
+  digitalWrite(m4_2, LOW);
+
+ 
+}
+
+void  stop(){
+  digitalWrite(m1_1, LOW);
+  digitalWrite(m1_2, LOW);
+
+  digitalWrite(m2_1, LOW);
+  digitalWrite(m2_2, LOW);
+
+  digitalWrite(m3_1, LOW);
+  digitalWrite(m3_2, LOW);
+
+  digitalWrite(m4_1, LOW);
+  digitalWrite(m4_2, LOW);
+}
+
+//PENDIENTE
+void color()
+{
+  digitalWrite(color_s3, LOW);
+  digitalWrite(color_s4, LOW);
+
+}
+
+
+void scan(){
+
+  uint16_t blocks;
+  char buf[32];
+  
+
+ for(int i=40; i<=140; i++ ){
+   
+    camera.write(i); // mover el servo a 90 grados    
+    delay(20);
+  }
+
+  if(blocks) {
+    sprintf(buf, "Detected %d block(s)", blocks);
+    Serial.println(buf);
+    
+    for (int i = 0; i < blocks; i++) {
+      //Suponiendo que detecta negro
+      if (pixy.ccc.blocks[i].m_signature == 1) { // Cambiar 1 por el número de firma del color que deseas detectar
+       // adelante();
+        //delay(800);
+       // stop();
+        //izquierda();
+        //delay(800);
+        
+        //Suponiendo que detecta verde
+      }else if (pixy.ccc.blocks[i].m_signature == 2) { // Cambiar 1 por el número de firma del color que deseas detectar
+        for(int i=10; i<=305; i++ ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+
+        for(int i=305; i>=10; i-- ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+          //Suponiendo que detecta amarillo
+      }else if (pixy.ccc.blocks[i].m_signature == 2) { // Cambiar 1 por el número de firma del color que deseas detectar
+         for(int i=10; i<=305; i++ ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+
+        for(int i=305; i>=10; i-- ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+         //Suponiendo que detecta rojo
+      }else if (pixy.ccc.blocks[i].m_signature == 2) { // Cambiar 1 por el número de firma del color que deseas detectar
+         for(int i=10; i<=305; i++ ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+
+        for(int i=305; i>=10; i-- ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+      }
+    }
+  }
+
+  for(int i=140; i>=40; i-- ){
+   
+    camera.write(i); // mover el servo a 90 grados
+    delay(20);  
+  }
+
+    if (blocks) {
+    sprintf(buf, "Detected %d block(s)", blocks);
+    Serial.println(buf);
+    
+    for (int i = 0; i < blocks; i++) {
+      //Suponiendo que detecta negro
+      if (pixy.ccc.blocks[i].m_signature == 1) { // Cambiar 1 por el número de firma del color que deseas detectar
+       // adelante();
+        //delay(800);
+//stop();
+       // izquierda();
+        //delay(800);
+        
+        //Suponiendo que detecta verde
+      }else if (pixy.ccc.blocks[i].m_signature == 2) { // Cambiar 1 por el número de firma del color que deseas detectar
+        for(int i=10; i<=305; i++ ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+
+        for(int i=305; i>=10; i-- ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+          //Suponiendo que detecta amarillo
+      }else if (pixy.ccc.blocks[i].m_signature == 2) { // Cambiar 1 por el número de firma del color que deseas detectar
+         for(int i=10; i<=305; i++ ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+
+        for(int i=305; i>=10; i-- ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+         //Suponiendo que detecta rojo
+      }else if (pixy.ccc.blocks[i].m_signature == 2) { // Cambiar 1 por el número de firma del color que deseas detectar
+         for(int i=10; i<=305; i++ ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+
+        for(int i=305; i>=10; i-- ){
+          dispenser.write(i); // mover el servo a 90 grados
+          delay(1);
+        }
+      }
+    }
+  }
+
+
+}
